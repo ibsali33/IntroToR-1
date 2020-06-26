@@ -22,4 +22,4 @@ Abbreviated introduction to R markdown and composing HTML reports.
 
 ### Feedback
 
-Looking for feedback on how to include more of the theoretical framework and statistics into the lesson. 
+Looking for feedback on how to include more of the theoretical framework and statistics into the lesson. I tried to make sure that I acknowledged all of my sources, however if reviewers notice missing citations I would also appreciate hearing about that as well.
