@@ -1,4 +1,4 @@
-# Intro to R: BIG Summer 2020
+# Intro to R: UCLA Collaboratory
 
 R is one of the most commonly used and powerful statistical programming languages and is used to analyze and manipulate data for virtually every professional industry. Over the last 10 years, powerful new tools within R have emerged to make data manipulation and visualization an easier and more accessible process. This has been written and designed as a three day workshop. This course is designed for learners who have little to no experience with R programming. The goal of this workshop is to help learners get started importing, manipulating and visualizinig data relatively quickly without an in depth explanation of R's theoretical framework. 
 
