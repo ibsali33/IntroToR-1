@@ -56,6 +56,7 @@ library('tibble')
 library('RColorBrewer')
 library('pheatmap')
 library('ggplot2')
+library('lubridate')
 
 ```
 
@@ -70,9 +71,8 @@ We will learn to import data into R and reshape it into formats that are useful 
 alldata <- read.csv("us_states_covid19_daily.csv", sep = ",")
 statepop <- read.csv("States.csv", sep = ",")
 
-allpositivecases <- data.frame(alldata$date, alldata$state, alldata$positive)
-selectedpops <- data.frame(statepop$State, statepop$StateAbbreviation,
-                           statepop$Pop.millions)
+selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions) %>% 
+  rename(State = statepop.StateAbbreviation, Population = statepop.Pop.millions)
 ```
 
 ## Data Wrangling and Cleaning
@@ -81,19 +81,17 @@ We will learn to handle imperfect data sets, calculate new columns, clean and re
 
 ```{r wrangling1, include = TRUE}
 # Merging the tables
-tablemerge <- full_join(allpositivecases, selectedpops, 
-                        by = c("alldata.state" = "statepop.StateAbbreviation"))
+tablemerge <- left_join(selectedpops, alldata, by = c("State"="state"))
 
 # Cleaning the data
 casespermillion <- tablemerge %>%
-  mutate(Log2_CPM=log2(alldata.positive/statepop.Pop.millions)) %>%
-  filter(statepop.Pop.millions != "NA") %>%
+  mutate(Log2_CPM = log2(positive/Population)) %>% 
+  filter(Population != "NA") %>%
   filter(Log2_CPM != -Inf)
 
 # Selecting and renaming columns, forplotting will be used for multiple types of plots.
 forplotting <- casespermillion %>%
-  select(alldata.date, alldata.state, Log2_CPM, alldata.positive, statepop.Pop.millions) %>%
-  rename(Date = alldata.date, State = alldata.state, Positive = alldata.positive, PopMill = statepop.Pop.millions)
+  select(date, State, Log2_CPM, positive, Population)
 
 ```
 
@@ -105,31 +103,31 @@ In this lesson, we will learn to restructure our data in order to work with data
 
 # Reshaping the data frame based on State and Date information
 forheatmapcpm <- forplotting %>%
-  select(State, Date, Log2_CPM) %>%
-  group_by(State, Date) %>%
-  spread(key = Date, value = Log2_CPM) 
+  select(State, date, Log2_CPM) %>%
+  group_by(State, date) %>%
+  spread(key = date, value = Log2_CPM) 
 
 # Cleaning and Trimming the Data set
 forheatmapcpm <- column_to_rownames(forheatmapcpm, var = "State")
 forheatmapcpm[is.na(forheatmapcpm)] <- min(forheatmapcpm, na.rm=TRUE)
 
 forheatmaptrim <- forheatmapcpm[
-  which(colnames(forheatmapcpm)=="20200315"):(ncol(forheatmapcpm))
+  which(colnames(forheatmapcpm)=="20200420"):(ncol(forheatmapcpm))
   ]
 
 # Creating the matrix
-cpmmatrix <- as.matrix(forheatmaptrim)
+mymatrix <- as.matrix(forheatmaptrim)
 
 # Perparing for Visualization
-cpmbreaks <- as.integer(min(forheatmapcpm-1)):as.integer(max(forheatmapcpm))
+mybreaks <- as.integer(min(forheatmaptrim-1)):as.integer(max(forheatmaptrim))
 
 # Syntax for pheatmap()
 cpmplot <- pheatmap(
-  cpmmatrix, 
+  mymatrix, 
   scale="none", 
   cluster_cols = FALSE, 
-  breaks = cpmbreaks, 
-  color = colorRampPalette(brewer.pal(9, "Purples"))(length(cpmbreaks)),
+  breaks = mybreaks, 
+  color = colorRampPalette(brewer.pal(9, "Purples"))(length(mybreaks)),
   border_color = NA,
   fontsize_col = 4,
   fontsize_row = 5,
@@ -142,54 +140,50 @@ cpmplot <- pheatmap(
 
 We will learn about the grammar of graphics and use ggplot2 to create some common plots.
 
-``` {r LinePlot, include = TRUE}
+```{r message=FALSE, warning=FALSE}
 
 # Selecting the data
 forplotting <- casespermillion %>%
-  select(alldata.date, alldata.state, Log2_CPM, alldata.positive) %>%
-  rename(Date = alldata.date, State = alldata.state, Positive = alldata.positive)
+  select(date, State, Log2_CPM, positive) 
 
 # Pick a state
 justca <- forplotting %>%
   filter(State == "CA") 
 
-# How many days since data collection first started?
-justca <- justca %>%
-  mutate(Days = nrow(justca):1)
-
 # The Plot
-plot <- ggplot(justca, aes(x = Days, y = Positive)) +
-  geom_smooth(method = "auto", color = "Cyan") +
-  geom_point(size = 0.1, alpha = 1) +
+plot <- ggplot(justca, aes(x = ymd(date), y = positive, color = State)) +
+  geom_smooth(method = "auto") +
+  geom_point(size = 0.1, alpha = 1, color = "black") +
   labs( x = "Days since first recorded case", y = "Number of Positive Cases", title = "Covid Cases in CA")
 
 plot
 
 ```
 
-We can study the growth of the pandemic over time in a particular state. Or we can veiw the number of new positive cases of the most populous states over the last month.
+We can study the growth of the pandemic over time in a particular state. Or we can view the average number of new positive cases per day of the most populous states over the month of August.
 
-``` {r violinplot, include = TRUE}
+```{r message=FALSE, warning=FALSE}
 
 # Selecting the data
 forplotting <- casespermillion %>%
-  select(alldata.date, alldata.state, Log2_CPM, alldata.positive, statepop.Pop.millions) %>%
-  rename(Date = alldata.date, State = alldata.state, Positive = alldata.positive, PopMill = statepop.Pop.millions) 
+  select(date, State, positiveIncrease, Population) 
 
 # Filter your states. 
-forplotting <- forplotting %>%
-  filter(PopMill > 10) # with populations over 10 Million
+bigstates <- forplotting %>%
+  filter(Population > 10) %>% # with populations over 10 Million
+  mutate(NewCasesPerMillion = positiveIncrease/Population)
 
 # Filter the dates
-forplotting <- forplotting %>%
-  filter(Date > 20200523) # any day after 2020-05-23
+forplotting <- bigstates %>%
+  filter(date > 20200801) # any day after 2020-08-01
 
 
-ggplot(data = forplotting, aes(State, Log2_CPM, fill = State))+
+ggplot(data = forplotting, aes(State, NewCasesPerMillion, fill = State))+
   geom_violin(scale = "area")+
-  geom_dotplot(binaxis="y", stackdir = "center", binwidth = 0.05, dotsize = .5, fill = "black", alpha = 0.2) + 
+  geom_dotplot(binaxis="y", stackdir = "center", dotsize = .5, fill = "black", alpha = 0.8) + 
   scale_fill_brewer(palette = "Greens") + 
-  labs( y = "Log2(Cases Per Million)", title = "Covid cases across the states")
+  labs( y = "New cases per day", title = "New cases per day per million since Aug 01")+
+  scale_y_log10()
   
 
 ```
