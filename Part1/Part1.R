@@ -2,9 +2,9 @@
 # Welcome to the UCLA Collaboratory Intro to R course. 
 # =====================================================================
 
-# R is one of the most commonly used and powerful statistical programming languages and is used to analyze and manipulate data for virtually every professional industry. Over the last 10 years, powerful new tools within R have emerged to make data manipulation and visualization an easier and more accessible process. R is an open source software which means that it's capabilities may change rapidly over time and without notice. However, it is and will remain freely available to those who need to use it. 
+# R is one of the most commonly used and powerful statistical programming languages and is used to analyze and manipulate data for virtually every professional industry. Over the last 10 years, powerful new tools within R have emerged to make data manipulation and visualization an easier and more accessible process. R is an open source software which means that will remain freely available to those who need to use it, but also may change its capabilities and improve over time. 
 
-# R reads your data (e.g., from an excel or text file) and makes an image of it, which is stored in temporary memory. When you edit your data, you are only editing an image of it; the original dataset is unaffected.  You can then create graphs and altered datasets, which can be written back to a permanent file. This is called 'nondestructive editing'. You can also create objects (like matrices) from directly within R, as opposed to reading them in from a file.
+# R reads your data (e.g., from an excel or text file) and makes an image of it, which is stored in temporary memory. When you edit your data, you are only editing an image of it; the original dataset is unaffected.  You can then create graphs and alter datasets, which can be written back to a permanent file. This is called 'nondestructive editing'. You can also create objects (like matrices) from directly within R, as opposed to reading them in from a file.
 
 # R can do almost anything you can think of doing with your data, which greatly expands the amount of creativity you can apply to your analyses. By using scripts (".R" files, such as this one), you can keep a record of everything you've done to manipulate and analyze your data. Those benefit you later, and can be published or shared with colleagues.
 
@@ -20,17 +20,17 @@
 # Day 1.1: The layout, soft-wrapped code, and saving files
 # =====================================================================
 
-# The initial phases of this course will move slowly to be sure that everyone's machines are working properly for the lessons to come. Once Rstuio is open the first thing to do is take a look around the user interface. 
+# The initial phases of this course will move slowly to be sure that everyone's machines are working properly for the lessons to come. Once Rstudio is open the first thing to do is take a look around the user interface. 
 
 # In RStudio's default setting, the left side is the terminal. Once you open an R source file, codes and scripts are displayed in the top left hand corner. The bottom left remains as is the terminal where code can be typed or copied. 
 
 # The top right is the "Global Environment" which is where information about objects and variables is stored. 
 
-# The bottom right panel is arguably the most important panel: take a look at the series of tabs. The 'Files' tab can be used to navigate and set directories. The 'Plots' tab is where generated plots will show up. The 'Packages' tab shows which R packages are installed in your environment. The 'Help' tab is where to search for usage information for R commands that are currently installed. The 'Viewer' tab is for viewing local web content or web-based graphics designed in R.
+# The bottom right panel is arguably the most important panel: take a look at the series of tabs. The 'Files' tab can be used to navigate and set directories. The 'Plots' tab is where generated plots will show up. The 'Packages' tab shows which R packages are installed in your environment. The 'Help' tab is where to search for usage information for R commands that are currently installed. The 'Viewer' tab is for viewing local web content or web-based graphics.
 
-# There is certainly plenty to exlore in the Rspace. There are some global options that you may want to review before beginning. First, allowing for 'soft-wrap' will make it significantly easier to view code in the top left window. To change this setting, go to the 'Tools' menu, and select "Global Options" this should open a new window with many options. Under the 'Code' tab, there should be a checkable box that says "soft-wrap R source files". Select that box, if it is not already selected.
+# There is certainly plenty to explore in the Rspace. There are some global options that you may want to review before beginning. First, allowing for 'soft-wrap' will make it significantly easier to view code in the top left window. To change this setting, go to the 'Tools' menu, and select "Global Options" this should open a new window with many options. Under the 'Code' tab, there will be a box that says "soft-wrap R source files". Select that box, if it is not already selected.
 
-# Creating new R projects, R source files, and R markdown documents.
+# Creating new R projects, R source files, and R markdown documents. (look for the + at the top left)
 
 
 
@@ -65,16 +65,16 @@ library('tidyr')
 # Day 1.3: Finding Help
 # =====================================================================
 
-# There are a lot of options when it comes to finding help in R. The quickest way is to go to the bottom right hand corder under the 'Help' tab and use the search box to search the commands you need help with. More on this later...
+# There are a lot of options when it comes to finding help in R. The quickest way is to go to the bottom right hand corner under the 'Help' tab and use the search box to search the commands you need help with. More on this later...
 
-# Sadly, the documentation for some packages in R is absolutely horrific and unintelligible. So our next best friend is the internet. But before going into this vast abyss - a good place to start are the RStudio cheat-sheets. These cheat sheets are made for some of the most commonly used and useful packages in R and they outline the command options and syntac for those packages. For this particular workshop I recommend the two listed below:
+# Sadly, the documentation for some packages in R is absolutely horrific and unintelligible. So our next best friend is the internet. But before going into the abyss - a good place to start are the RStudio cheat-sheets. These cheat sheets are made for some of the most commonly used and useful packages in R and they outline the command options and syntax for those packages. For this particular workshop I recommend the two listed below:
 
 # dplyr: https://4.files.edl.io/b9e2/07/12/19/142839-a23788fb-1d3a-4665-9dc4-33bfd442c296.pdf
 # ggplot2:  https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
-# RStudio has created a number of these cheat sheets and they can all be accessed using RStudio Cloud or by searching RStudio cheat sheets. There is no reason to look at these in detail during the workshop - the relevant commands will be provided through instruction. However, I highly recommend reviewing these cheat sheets to see the breadth of capabilites of RStudio's selected packages.
+# RStudio has created a bunch of these cheat sheets and they can all be accessed using RStudio Cloud or by searching RStudio cheat sheets. There is no reason to look at these in detail during the workshop - the relevant commands will be provided through instruction. However, I highly recommend reviewing these cheat sheets to see the breadth of capabilities of RStudio's selected packages at some point.
 
-# Otherwise, a large majority of data wrangling and visualization questions have been asked or discussed on various forums. One strategy is to just describe what you are trying to do in the google search bar and see if any forums pop up. Common forums include 'StackOverflow', 'R-bloggers' and for the computational biologists 'Biostars'.
+# Otherwise, a large majority of data wrangling and visualization questions have been asked or discussed on various forums. One strategy is to just describe what you are trying to do in the google search bar and see if any forums pop up. Common forums include 'StackOverflow', 'R-bloggers' and for the life sciences 'Biostars'.
 
 # =====================================================================
 # Day 1.4: Importing Data
@@ -99,9 +99,6 @@ library('tidyr')
 # To see the contents of the working directory type dir()
 
 
-
-
-## Protip: Generally when starting a new project it is useful to create a folder for the project, then within that folder create an Rproj file. Whenever you open the Rproj file you will automatically be in the directory where the project is saved. You can write your R code into an R source file like the one you are reading within the same folder. If all your code data files are saved within this folder you should never have to go hunting for the correct directory, even if the folder containing the project moves to another location. 
 
 # ---------------------------------------------------------------------
 # Reading in a file as a Data Frame
@@ -146,6 +143,7 @@ class(statepop)
 # You can examine the class of specific columns in the data by using the dataframe$column syntax. An example is below. PC users might have issues with the statepop name. Check to see what the column name is. If it has any strange symbol run: names(statepop)[1]<-"State". This is an example of renaming using indexing. 
 
 class(statepop$State)
+class(statepop$Pop.millions)
 
 # What are the classifications for the other columns?
 
@@ -162,15 +160,7 @@ class(statepop$State)
 
 ## Protip: if you have NA values in your data set and you want those values to be ignored rm.na = TRUE can be added into a command. If you do not want to ignore NA values you can add rm.na = FALSE. This will become relevant later.
 
-## Removing items from your Global Evironment. If you are working with a lot of different objects in the global environent it may be helpful to periodically view or clear it out. To list everything your global environment use ls(), to clear out individual objects use rm(). To clear the whole global environment use rm(list=ls()).
-
-# ---------------------------------------------------------------------
-# Reflections
-# ---------------------------------------------------------------------
-
-# Why are there X-tra columns? They don't seem to be in the original CSV file.
-
-
+## Removing items from your Global Environment. If you are working with a lot of different objects in the global environment it may be helpful to periodically view or clear it out. To list everything your global environment use ls(), to clear out individual objects use rm(). To clear the whole global environment use rm(list=ls()).
 
 
 # ---------------------------------------------------------------------
@@ -179,20 +169,20 @@ class(statepop$State)
 
 # We can clean up our data frame using the data.frame() command. We can use this to create a new data frame without the columns that we don't need. For this particular exercise we only need the StateAbbreviation and the Pop.millions columns. This can serve as our list of selected populations. Here is an example
 
-selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions)
+selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions) %>% 
+  rename(State = statepop.StateAbbreviation, Population = statepop.Pop.millions)
 
 # Notice that in the Global Environment, selectedpops only has 2 variables instead of 25. Those are the two columns that we picked. 
 
-# Protip: Keep an eye on the observations and variables as you process through your data. This can help keep track of what is happening to the shape of your data. When you have lots of varaibles you have a wide data set. When you have lots of observations you have a longer data set. The data needs to be shaped in different ways for different data visualization packages.
+# Protip: Keep an eye on the observations and variables as you process through your data. This can help keep track of what is happening to the shape of your data. When you have lots of variables you have a wide data set. When you have lots of observations you have a longer data set. The data needs to be shaped in different ways for different data visualization packages.
 
 # ---------------------------------------------------------------------
 # Test your skillz
 # ---------------------------------------------------------------------
 
-# For our research question we want to find a way to visualize the number of cases-per-million of COVID19 for every state in the US. We need to import some COVID19 data for analysis. In this lesson we pull from data that is being updated every day by the New York Times and deposited on kaggle. Follow this link to learn more about the data set: https://www.kaggle.com/sudalairajkumar/covid19-in-usa. Within the data folder, there are three files that have been downloaded from this repository. Import the data from the us_states_covid19_daily.csv file. Create a variable called allpositivecases containg three columns: date, state, and positive.
+# For our research question we want to find a way to visualize the number of cases-per-million of COVID19 for every state in the US. We need to import some COVID19 data for analysis. In this lesson we pull from data that is being updated every day by the New York Times and deposited on kaggle. Follow this link to learn more about the data set: https://www.kaggle.com/sudalairajkumar/covid19-in-usa. Within the data folder, there are three files that have been downloaded from this repository. Import the data from the us_states_covid19_daily.csv file into an object called alldata. 
 
 alldata <- read.csv("us_states_covid19_daily.csv", header = TRUE, ",")
-allpositivecases <- data.frame(alldata$date, alldata$state, alldata$positive)
 
 # How many observations and variables are there in the full 'states' data set? 
 
@@ -215,14 +205,15 @@ allpositivecases <- data.frame(alldata$date, alldata$state, alldata$positive)
 
 
 
-# Carefully examining the structure and information that is within data is important for understanding the biases of the data sets that you are using. As a computational biologist or a data scientist, you have the power to automate tasks, rapidly analyze and visualize information. With that comes some significant responsibility. Automation of tasks can lead to very serious negative consequences if algorithms don't fully acknolwedge, and work to counter the biases and limitations of how algorithms are trained. 
+# Keep in mind that when you name columns or variables make sure that there is enough information for the name to be useful. If you have to share or troubleshoot your work someone else might have to look through the code and make sense of it. Same thing with loading data sets, knowing what the variables mean within data sets can help inform how you interpret the information. Likewise, looking at the full context of the research ultimately helps determine how the data can be interpreted.
+
 
 # ---------------------------------------------------------------------
 # Recommended Reading
 # ---------------------------------------------------------------------
 
 # Weapons of Math Destruction by Cathy O' Neil
-# Algorithms of Oppression by Saphiya Noble
+# Algorithms of Oppression by Safiya Noble
 
 # =====================================================================
 # Day 2.1: Data wrangling with dplyr
@@ -236,7 +227,7 @@ allpositivecases <- data.frame(alldata$date, alldata$state, alldata$positive)
 
 # In order to carry forward with our analysis, we need to reorganize the data in a way that aligns the state population information with the number of positive cases. In order for R to merge tables - they need to have some level of overlapping information so that it knows how to align the tables. In this case the alldata.state column in allpositivecases has information that is identical to the statepop.StateAbbreviation information. We can use the dplyr full_join() command in order to bring the tables together and use the "by =" to tell it what columns should be treated as equivalent.
 
-tablemerge <- full_join(allpositivecases, selectedpops, by = c("alldata.state" = "statepop.StateAbbreviation"))
+tablemerge <- left_join(selectedpops, alldata, by = c("State"="state"))
 
 # Notice how the tables merge together. Did it work? How did this operation merge the tables? Why is the statepop data repeated? Where were NA's newly introduced?
 
@@ -263,8 +254,8 @@ NewDataFrame <- OldDataFrame %>%
 # For our example, I want to calculate the number of COVID cases per million (CPM) residents for every state in the US. When we merged the table above, the state population information (in millions) aligned with the number of positive COVID19 cases. I will eventually want to view the doubling rate for the CPM so in the same step I will log2 transform the data.
 
 casespermillion <- tablemerge %>%
-  mutate(Log2_CPM=log2(alldata.positive/statepop.Pop.millions)) %>% 
-  filter(statepop.Pop.millions != "NA") %>%
+  mutate(Log2_CPM=log2(positive/Population)) %>% 
+  filter(Population != "NA") %>%
   filter(Log2_CPM != -Inf)
 
 # NA's were introduced in rows where the state population data was unavailable. We can remove rows containing NA using the filter command. In this particular command we use a 'relational operator'. != translates to 'is not equal to' when used in the filter command. What are some other relational operators used in R?
@@ -285,25 +276,13 @@ casespermillion <- tablemerge %>%
 # In order use pheatmap() we will need a numeric matrix that only has information about state, date and CPM. We can use dplyr to select the columns we want to use to create our data matrix, and rename the columns into things that are easier to handle. 
 
 forplotting <- casespermillion %>%
-  select(alldata.date, alldata.state, Log2_CPM) %>%
-  rename(Date = alldata.date, State = alldata.state)
+  select(date, State, Log2_CPM) 
 
 # A numeric matrix is a grid of numeric vaules with some attached metadata. Currently we have a long data frame with state information that is stored as a character. We need to reshape the matrix to spread out the values so that state names are the rownames and we set a column for every date. To do this we can use the group_by() command on state and date information, and use the spread() command to spread the Log2_CPM value along the key Date variable.
 
 forheatmap <- forplotting %>%
-  group_by(State, Date) %>%
-  spread(key = Date, value = Log2_CPM) 
-
-# ---------------------------------------------------------------------
-# Depreciated commands
-
-# Note that the spread() command is depreciated/retired. This means that there are no longer updates to the particular package. For an open source software like R... why is it a problem to use a retired function since it still works right now? 
-
-
-
-# Within the help area look up to see what function serves to replace it. What do they recommend? How would you rewrite the code using the documentation-recommended function?
-
-# ---------------------------------------------------------------------
+  group_by(State, date) %>%
+  spread(key = date, value = Log2_CPM) 
 
 # Notice the new structure of our data frame after using the spread() command. How many observations and variables do we have now? Where do the new NA values come from?
 
@@ -331,7 +310,7 @@ NewDataFrame <- OldDataFrame[40:149]
 # Unfortunately we don't know which columns they might be. Any day we download the data, the table could get even wider so I want R to figure out those positions for me. The dates information is stored as yyyymmdd. So March 1 would be 20200301. We can then ask R which() column within the OldDataFrame has the colname() that is equivalent to 20200301. We can also ask R how many columns total are in the matrix with ncol(). Once we know those two values we can call are new data frame trimmedheatmap
 
 trimmedheatmap <- forheatmap[
-  which(colnames(forheatmap)=="20200301"):(ncol(forheatmap))
+  which(colnames(forheatmap)=="20200401"):(ncol(forheatmap))
   ]
 
 # Break this up and run the commands separately to see what they each do.
@@ -364,11 +343,14 @@ cpmbreaks <- as.integer(min(mymatrix-1)):as.integer(max(mymatrix))
 
 cpmplot <- pheatmap(
   mymatrix, 
-  scale = "none", 
+  scale="none", 
   cluster_cols = FALSE, 
   breaks = cpmbreaks, 
-  color = colorRampPalette(brewer.pal(9, "Blues"))(length(cpmbreaks)),
-  border_color = NA
+  color = colorRampPalette(brewer.pal(9, "Purples"))(length(cpmbreaks)),
+  border_color = NA,
+  fontsize_col = 4,
+  fontsize_row = 5,
+  main = "Log2(COVID Cases per Million) across the states"
 )
 
 # Below, I justify my decisions for picking each of the arguments.
@@ -380,6 +362,8 @@ cpmplot <- pheatmap(
 # culster_cols or cluster_rows are the designations that determine whether or not the rows are used for similarity clustering. 
 
 # To encourage readability of the code we setting each argument within pheatmap() on separate line separated by commas. For color, we loaded the RColorBrewer package at the beginning of the document. Using the colorRampPalette function we set a color "Ramp", or gradient, using the full range (9) of the "Blues" brewer palette designated one color for the number of values in cpmbreaks we calculated above. We remove the border_color for ease of reading the heatmap.
+
+# 'main' is the title of the plot, which can be added with quotes.
 
 
 # =====================================================================
@@ -393,7 +377,7 @@ cpmplot <- pheatmap(
 # First lets pull some data from an earlier step. Lets pick a state, and plot a line graph using ggplot2 that shows the total number of positive cases beginning on the first day of recorded COVID19 infections for that state. 
 
 forplotting <- casespermillion %>%
-  select(alldata.date, alldata.state, Log2_CPM, alldata.positive) %>%
+  select(date, State, Log2_CPM, positive) %>%
   rename(Date = alldata.date, State = alldata.state, Positive = alldata.positive)
 
 justca <- forplotting %>%
