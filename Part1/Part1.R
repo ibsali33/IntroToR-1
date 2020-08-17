@@ -45,9 +45,10 @@
 # tidyr
 # dplyr
 # pheatmap
-# rcolorbrewer
+# RColorBrewer
 # tibble
 # ggplot2
+# lubridate
 
 install.packages('tidyr') 
 
@@ -169,10 +170,11 @@ class(statepop$Pop.millions)
 
 # We can clean up our data frame using the data.frame() command. We can use this to create a new data frame without the columns that we don't need. For this particular exercise we only need the StateAbbreviation and the Pop.millions columns. This can serve as our list of selected populations. Here is an example
 
-selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions) %>% 
-  rename(State = statepop.StateAbbreviation, Population = statepop.Pop.millions)
+selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions)
 
-# Notice that in the Global Environment, selectedpops only has 2 variables instead of 25. Those are the two columns that we picked. 
+selectedpops <- rename(selectedpops, State = statepop.StateAbbreviation, Population = statepop.Pop.millions)
+
+# Notice that in the Global Environment, selectedpops only has 2 variables instead of 25. Those are the two columns that we picked and renamed.
 
 # Protip: Keep an eye on the observations and variables as you process through your data. This can help keep track of what is happening to the shape of your data. When you have lots of variables you have a wide data set. When you have lots of observations you have a longer data set. The data needs to be shaped in different ways for different data visualization packages.
 
@@ -192,7 +194,6 @@ alldata <- read.csv("us_states_covid19_daily.csv", header = TRUE, ",")
 
 
 
-
 # Which ones appear interesting to you? Think about some other research questions that you might want to ask with a data set like this and write them below.
 
 
@@ -205,7 +206,7 @@ alldata <- read.csv("us_states_covid19_daily.csv", header = TRUE, ",")
 
 
 
-# Keep in mind that when you name columns or variables make sure that there is enough information for the name to be useful. If you have to share or troubleshoot your work someone else might have to look through the code and make sense of it. Same thing with loading data sets, knowing what the variables mean within data sets can help inform how you interpret the information. Likewise, looking at the full context of the research ultimately helps determine how the data can be interpreted.
+# Keep in mind that when you name columns or variables make sure that there is enough information for the name to be useful. If you have to share or troubleshoot your work someone else might have to look through the code and make sense of it. Same thing with loading data sets, knowing what the variables mean within data sets can help inform how you interpret the information. Likewise, looking at the full context of the research ultimately helps determine how the data can be interpreted. Failing to understand the full context of the data you are using for an analysis can lead to very significant real-world consequences (see book recommendations below)
 
 
 # ---------------------------------------------------------------------
@@ -233,7 +234,7 @@ tablemerge <- left_join(selectedpops, alldata, by = c("State"="state"))
 
 
 
-# Check the documentation to see examples of arguments and syntax for the command. What happens if we use inner_join() instead of full_join()? What about right_join() or left_join()
+# Check the documentation to see examples of arguments and syntax for the command. What happens if we use inner_join() instead of left_join()? What about right_join() or full_join()?
 
 
 
@@ -254,7 +255,7 @@ NewDataFrame <- OldDataFrame %>%
 # For our example, I want to calculate the number of COVID cases per million (CPM) residents for every state in the US. When we merged the table above, the state population information (in millions) aligned with the number of positive COVID19 cases. I will eventually want to view the doubling rate for the CPM so in the same step I will log2 transform the data.
 
 casespermillion <- tablemerge %>%
-  mutate(Log2_CPM=log2(positive/Population)) %>% 
+  mutate(Log2_CPM = log2(positive/Population)) %>% 
   filter(Population != "NA") %>%
   filter(Log2_CPM != -Inf)
 
@@ -293,9 +294,6 @@ forheatmap <- forplotting %>%
 
 forheatmap <- column_to_rownames(forheatmap, var = "State")
 
-# Pick a different column as a rowname... What happens?
-
-
 
 # =====================================================================
 # Day 2.3: Cleaning and trimming data frame with indexing.
@@ -317,9 +315,9 @@ trimmedheatmap <- forheatmap[
 
 
 
-# Since NA values in this plot represent no information or no positive cases for a particulur date. We will change all NA values in the our data frame called table into the lowest value on the trimmedmatrix data frame. We can also do this through indexing. 
+# Since NA values in this plot represent no information or no positive cases for a particular date. We will change all NA values in the our data frame called table into the lowest value on the trimmedheatmap data frame. We can also do this through indexing. 
 
-# The is.na() command will return a TRUE or FALSE statement identifying evry NA value within trimmedmatrix. For every value that is TRUE, we can replace it with the min() value in the table using the code below.
+# The is.na() command will return a TRUE or FALSE statement identifying evry NA value within trimmedheatmap. For every value that is TRUE, we can replace it with the min() value in the table using the code below.
 
 trimmedheatmap[is.na(trimmedheatmap)] <- min(trimmedheatmap, na.rm=TRUE)
 
@@ -335,11 +333,11 @@ mymatrix <- as.matrix(trimmedheatmap)
 
 # Finally we can write the code for our heatmap. pheatmap is extremely customizable and has a lot more functinoality that we have time to describe in this course. I highly recommend reviewing the documentation or other forums that describe how to use the command in detail. https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12/topics/pheatmap. We also use RColorBrewer which gives us more control and customizability of color gradients used for the plots.
 
-# Before we make the plot lets set some parameters for colors. In order to visualize doubling time, we log2 transformed the data. In order to see doubling time clearly on the map - it would be best to set each shade on the color spectrum as a whole-number integer bin in log2 space. The 'breaks =' parameter allows us to designate the bins used to create the color spectrum for the heatmap. We can use the as.integer() function to caculate the min and max values for the matrix of data. Below we set the range of values as a list called cpmbreaks.
+# Before we make the plot lets set some parameters for colors. In order to visualize doubling time, we log2 transformed the data. In order to see doubling time clearly on the map - it would be best to set each shade on the color spectrum as a whole-number integer bin in log2 space. The 'breaks =' parameter allows us to designate the bins used to create the color spectrum for the heatmap. We can use the as.integer() function to calculate the min and max values for the matrix of data. Below we set the range of values as a list called cpmbreaks.
 
 cpmbreaks <- as.integer(min(mymatrix-1)):as.integer(max(mymatrix))
 
-# Now lets take a look at the code that will make our plot. For this particluar example, notice the syntax and organization of the command that will build our heatmap. Run this code chunk to see what happens.
+# Now lets take a look at the code that will make our plot. For this particular example, notice the syntax and organization of the command that will build our heatmap. Run this code chunk to see what happens.
 
 cpmplot <- pheatmap(
   mymatrix, 
@@ -372,27 +370,28 @@ cpmplot <- pheatmap(
 
 # ggplot2 is based on what is called the 'grammar of graphics'. This is the idea that you can build nearly every graph from the same components: (1) a data set, (2) a coordinate system and (3) 'geoms' which are visual marks that represent data points. ggplot2 is able to create a diverse set of plots using these three characteristics. Here we will explore how to construct a few example plots using ggplot2. For a more exhaustive list of ggplot2 functions please review the ggplot2 cheat sheet linked here: https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf. 
 
-# It is worth fully exploring ggplot2 documentation. There are many customizable features for each geometry making ggplot2 one of the most comprehensive packages for data visualizaiton in R. 
+# It is worth fully exploring ggplot2 documentation. There are many customizable features for each geometry making ggplot2 one of the most comprehensive packages for data visualization in R. 
 
 # First lets pull some data from an earlier step. Lets pick a state, and plot a line graph using ggplot2 that shows the total number of positive cases beginning on the first day of recorded COVID19 infections for that state. 
 
 forplotting <- casespermillion %>%
-  select(date, State, Log2_CPM, positive) %>%
-  rename(Date = alldata.date, State = alldata.state, Positive = alldata.positive)
+  select(date, State, Log2_CPM, positive) 
 
 justca <- forplotting %>%
   filter(State == "CA") 
 
-justca <- justca %>%
-  mutate(Days = nrow(justca):1)
-
-plot <- ggplot(justca, aes(x = Days, y = Positive)) +
-  geom_smooth(method = "auto", color = "Cyan") +
-  geom_point(size = 0.1, alpha = 1)
+plot <- ggplot(justca, aes(x = ymd(date), y = positive, color = State)) +
+  geom_smooth(method = "auto") +
+  geom_point(size = 0.1, alpha = 1, color = "black") +
+  labs( x = "Days since first recorded case", y = "Number of Positive Cases", title = "Covid Cases in CA")
 
 plot
 
 # This is a typical example of a plot created by ggplot. Notice the syntax in the example below. Within ggplot() we define the data frame to pull information from, and list the 'aesthetics' aes() or the defining characteristics for the plot. Within the aesthetics the x and y variables are defined, along with other measurable characteristics. The arguments are linked together with a + . This allows multiple layers to be stacked on top of each other to create a plot. 
+
+# Notice that on the x variable date is within ymd(). This is a command within the lubridate package. Try and create the plot without ymd() around date - what happens?
+
+# The axis titles and legends are highly customizable. My best strategy so far to figure out how to customize these components has been to Google search something like "how to edit axis labels ggplot". Many people have posed blogs or strategies they have used to overcome various challenges. For now, notice that labels are edited under labs( x = "x label", y = "y label", title = "chart title")
 
 ExamplePlot <- ggplot(DataFrame, aes(X, Y)) + 
   geom_smooth() + # this geom creates a linear model
@@ -402,11 +401,11 @@ ExamplePlot <- ggplot(DataFrame, aes(X, Y)) +
 # Reflections and Connections
 # ---------------------------------------------------------------------
 
-# Look into the documentation for geom_smooth() look at the usage. What does the method parameter do? What other colors can you use for the line? 
+# Look into the documentation for geom_smooth() look at the usage. What does the method parameter do? What happens when you create lines with different methods? What do these lines mean?
 
 
 
-# Look into the documentation for geom_point() what aesthetics can you find under geom_point? What happens if we change the size to 1? What does seeting the alpha do in ggplot? ()
+# Look into the documentation for geom_point() what aesthetics can you find under geom_point? What happens if we change the size to 1? What does setting the alpha do in ggplot? ()
 
 
 
@@ -416,7 +415,7 @@ ExamplePlot <- ggplot(DataFrame, aes(X, Y)) +
 # ---------------------------------------------------------------------
 
 
-# There are many ways to do things in R, plotting is no exeception. Other plotting libraries that could be of interest...
+# There are many ways to do things in R, plotting is no exception. Other plotting libraries that could be of interest...
 
 # gplots - general plotting library
 # plotly -  general plotting library
