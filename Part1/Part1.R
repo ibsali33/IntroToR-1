@@ -376,7 +376,7 @@ rownames(SelectedPops)
 # Cleaning Data with Dplyr
 # ---------------------------------------------------------------------
 
-# The easiest way to start workiing with and clean data frames is with the 
+# The easiest way to start working with and clean data frames is with the 
 # dplyr and tidyr packages. These packages offers a wide variety commands to 
 # filter and clean data frames in order to make data sets more manageable to work
 # with and visualize. We loaded them earlier so we can get started using them.
@@ -489,7 +489,7 @@ StatePop <- select(StatePop, State, StateAbbreviation, Pop.millions)
 # the data in a way that aligns the state population information with 
 # the number of positive cases. In order for R to merge tables - they 
 # need to have some level of overlapping information so that it knows 
-# how to align the tables. In this case we are going to match collumns
+# how to align the tables. In this case we are going to match columns
 # based on the state information. We can use the dplyr full_join() 
 # command in order to bring the tables together and use the "by =" to 
 # tell it what columns should be treated as equivalent.
@@ -517,7 +517,7 @@ CovidStateData <- left_join(StatePop, CovidData, by = c("StateAbbreviation"="sta
 # Pipes are operators that can be used to string together verbs in dplyr. 
 # They looks like this %>%. Using pipes enables stringing together multiple 
 # dplyr operations in one step. Notice the syntax of this example. Organizing 
-# the code in this way can help with readabilty of the code.
+# the code in this way can help with readability of the code.
 
 NewDataFrame <- OldDataFrame %>%
   Select(col1, col2, col3) %>% # select columns from OldDataFrame
@@ -543,11 +543,9 @@ CasesPerMillion <- CovidStateData %>%
 
 
 
-# As some may already know, calculating the log(0) is not possibile so When 
-# R calculates log2(0) it results in '-Inf', this is not plottable information, 
-# so we will also remove rows containing -Inf. What if we wanted to our plot 
-# to only show data from states once they reach a threshold of 1 CPM. How would 
-# we rewrite the filter command to remove all log2(CPM) values below 1?
+# What if we wanted to our plot to only show data from states once they reach 
+# a threshold of 1 CPM. How would we rewrite the filter command to remove all
+# CPM values below 1?
 
 
 
@@ -622,8 +620,8 @@ CpmPlot <- ggplot(InfectionGrowth, aes(ymd(XXXX), XXX, color = XXXXX)) +
 CpmPlot
 
 # This plot is a bit overwhelming - we can separate out the different states
-# by using the facet_wrap command. I've copied over the syntax of the code, fill in 
-# the variables where we see XXX to get the code to work.
+# by using the facet_wrap command. I've copied over the syntax of the code, fill
+# in the variables where we see XXX to get the code to work.
 
 CpmPlotFacets <- ggplot(InfectionGrowth, aes(ymd(XXXX), XXX, color = XXXXX)) +
   geom_smooth(method = "auto") + 
@@ -663,7 +661,7 @@ CpmViolin2
 
 # The stat_summary function is one of several ways to add a mean and standard 
 # deviation line. For the arguments in the stat_summary you can find them
-# in the help area, or through a google search of the type of lines you want
+# in the help area, or through a Google search of the type of lines you want
 # to add. In this case: "fun.data = mean_sdl" generates the information 
 # needed to plot the mean and standard deviation; "fun.args = list(mult=1)" 
 # relates to the standard deviation multiplier. In our plot we have a mean
@@ -694,7 +692,7 @@ CpmViolin2
 # Day 2.3: Performing Basic Statistics in R
 # =====================================================================
 
-# We have gotten a taste of what R can do in data visualizaition. We 
+# We have gotten a taste of what R can do in data visualization. We 
 # have plots and can see the mean values and their standard deviations.
 # Now the question is how do we know that the different states are 
 # significantly different? Using our data tables from before lets perform
@@ -718,7 +716,7 @@ t.test(CAcases$CPM, FLcases$CPM)
 
 # Florida and California are qualitatively different. This we can actually see
 # on the plots that we created before. However, Ohio and Pennsylvania look
-# much more similiar. Using the same approach, test to see if they are significantly
+# much more similar. Using the same approach, test to see if they are significantly
 # different. I've copied over the code for this. Fill in the XXXXX in order to 
 # get it to run
 
@@ -734,7 +732,8 @@ ILcases <- LastMonthInfections %>%
 # ---------------------------------------------------------------------
 
 
-# There are many ways to do things in R, plotting is no exception. Other plotting libraries that could be of interest...
+# There are many ways to do things in R, plotting is no exception. Other 
+# plotting libraries that could be of interest...
 
 # gplots - general plotting library
 # plotly -  general plotting library
