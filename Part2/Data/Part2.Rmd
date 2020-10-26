@@ -1,7 +1,7 @@
 ---
 title: "IntroToR"
-author: "BIGsummer"
-date: "6/23/2020"
+author: "UCLA Collaboratory"
+date: "10/27/2020"
 output: 
   html_document:
     toc: TRUE
@@ -54,7 +54,6 @@ library('tidyr')
 library('dplyr')
 library('tibble')
 library('RColorBrewer')
-library('pheatmap')
 library('ggplot2')
 library('lubridate')
 
@@ -68,11 +67,16 @@ We will learn to import data into R and reshape it into formats that are useful 
 
 # This is just repeating the commands that we did in the first day(s) to import our data.
 
-alldata <- read.csv("us_states_covid19_daily.csv", sep = ",")
-statepop <- read.csv("States.csv", sep = ",")
+#Import the Covid Data Set
+CovidData <- read.csv("us_states_covid19_daily.csv", header = TRUE, sep = ",")
 
-selectedpops <- data.frame(statepop$StateAbbreviation, statepop$Pop.millions) %>% 
-  rename(State = statepop.StateAbbreviation, Population = statepop.Pop.millions)
+#Import the States data set (including DC and PR)
+StatePop <- read.table("States.csv", header = TRUE, sep = ",")
+StatePop <- select(StatePop, State, StateAbbreviation, Pop.millions)
+
+#Import MMR Vaccine Rate Data set from Tidy Tuesday
+MMRVaccineRate <- read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-25/measles.csv', header = TRUE, sep = ",")
+
 ```
 
 ## Data Wrangling and Cleaning
@@ -81,114 +85,106 @@ We will learn to handle imperfect data sets, calculate new columns, clean and re
 
 ```{r wrangling1, include = TRUE}
 # Merging the tables
-tablemerge <- left_join(selectedpops, alldata, by = c("State"="state"))
+CovidStateData <- left_join(StatePop, CovidData, by = c("StateAbbreviation"="state"))
 
-# Cleaning the data
-casespermillion <- tablemerge %>%
-  mutate(Log2_CPM = log2(positive/Population)) %>% 
-  filter(Population != "NA") %>%
-  filter(Log2_CPM != -Inf)
+# Calculating new columns and filtering data
+CasesPerMillion <- CovidStateData %>%
+  mutate(CPM = positive/Pop.millions) %>% 
+  filter(Pop.millions != "NA")
 
-# Selecting and renaming columns, forplotting will be used for multiple types of plots.
-forplotting <- casespermillion %>%
-  select(date, State, Log2_CPM, positive, Population)
-
-```
-
-## Visualizing with heatmaps
-
-In this lesson, we will learn to restructure our data in order to work with data visualization packages. 
-
-```{r heatmap1, include = TRUE}
-
-# Reshaping the data frame based on State and Date information
-forheatmapcpm <- forplotting %>%
-  select(State, date, Log2_CPM) %>%
-  group_by(State, date) %>%
-  spread(key = date, value = Log2_CPM) 
-
-# Cleaning and Trimming the Data set
-forheatmapcpm <- column_to_rownames(forheatmapcpm, var = "State")
-forheatmapcpm[is.na(forheatmapcpm)] <- min(forheatmapcpm, na.rm=TRUE)
-
-forheatmaptrim <- forheatmapcpm[
-  which(colnames(forheatmapcpm)=="20200420"):(ncol(forheatmapcpm))
-  ]
-
-# Creating the matrix
-mymatrix <- as.matrix(forheatmaptrim)
-
-# Perparing for Visualization
-mybreaks <- as.integer(min(forheatmaptrim-1)):as.integer(max(forheatmaptrim))
-
-# Syntax for pheatmap()
-cpmplot <- pheatmap(
-  mymatrix, 
-  scale="none", 
-  cluster_cols = FALSE, 
-  breaks = mybreaks, 
-  color = colorRampPalette(brewer.pal(9, "Purples"))(length(mybreaks)),
-  border_color = NA,
-  fontsize_col = 4,
-  fontsize_row = 5,
-  main = "Log2(COVID Cases per Million) across the states"
-  )
+# Selecting and renaming columns
+InfectionGrowth <- CasesPerMillion %>%
+  select(date, State = StateAbbreviation, CPM, positive, Pop.millions) 
 
 ```
 
-## Data Visualization with ggplot2
+## Visualizing data trends using ggplot
 
-We will learn about the grammar of graphics and use ggplot2 to create some common plots.
+In this lesson, we use ggplot to create trendlines for data that we work with.
+
+
+```{r CPMGrowth, include = TRUE}
+
+# Here we filter states that have populations over 10 million people
+InfectionGrowth <- InfectionGrowth %>%
+  filter(Pop.millions >= 10) 
+
+# Here we write the ggplot code. We use the ymd() funciton on our x axis
+# to make it easier to work with the dates in our table. We use geom_smooth
+# to create a trend line and we set some axis labels.
+
+CpmPlot <- ggplot(InfectionGrowth, aes(ymd(date), CPM, color = State)) +
+  geom_smooth(method = "auto") + 
+  labs(x = "Date", 
+       y = "Cases Per Million", 
+       title = "Covid Cases in Large States")
+
+CpmPlot
+
+```
+
+```{r CPMFacets, include = TRUE}
+
+# We can easily separate plots so that we can analyze and compare
+# data in different ways using facet_wrap()
+
+CpmPlotFacets <- ggplot(InfectionGrowth, aes(ymd(date), CPM, color = State)) +
+  geom_smooth(method = "auto") + 
+  facet_wrap(facets = "State") + 
+  labs(x = "Date", 
+       y = "Cases Per Million", 
+       title = "Covid Cases in Large States")
+
+CpmPlotFacets
+
+```
+
+
+## Visualizing data distribution with ggplot2
+
+We created a violin plots to look at data distribution.
 
 ```{r message=FALSE, warning=FALSE}
 
 # Selecting the data
-forplotting <- casespermillion %>%
-  select(date, State, Log2_CPM, positive) 
+LastMonthInfections <- InfectionGrowth %>%
+  filter(date >= 20200827)
 
-# Pick a state
-justca <- forplotting %>%
-  filter(State == "CA") 
-
-# The Plot
-plot <- ggplot(justca, aes(x = ymd(date), y = positive, color = State)) +
-  geom_smooth(method = "auto") +
-  geom_point(size = 0.1, alpha = 1, color = "black") +
-  labs( x = "Days since first recorded case", y = "Number of Positive Cases", title = "Covid Cases in CA")
-
-plot
-
-```
-
-We can study the growth of the pandemic over time in a particular state. Or we can view the average number of new positive cases per day of the most populous states over the month of August.
-
-```{r message=FALSE, warning=FALSE}
-
-# Selecting the data
-forplotting <- casespermillion %>%
-  select(date, State, positiveIncrease, Population) 
-
-# Filter your states. 
-bigstates <- forplotting %>%
-  filter(Population > 10) %>% # with populations over 10 Million
-  mutate(NewCasesPerMillion = positiveIncrease/Population)
-
-# Filter the dates
-forplotting <- bigstates %>%
-  filter(date > 20200801) # any day after 2020-08-01
-
-
-ggplot(data = forplotting, aes(State, NewCasesPerMillion, fill = State))+
+# The Plot includes mean and stadnard deviation bars
+CpmViolin2 <- ggplot(LastMonthInfections, aes(State, CPM, fill = State)) +
   geom_violin(scale = "area")+
-  geom_dotplot(binaxis="y", stackdir = "center", dotsize = .5, fill = "black", alpha = 0.8) + 
-  scale_fill_brewer(palette = "Greens") + 
-  labs( y = "New cases per day", title = "New cases per day per million since Aug 01")+
-  scale_y_log10()
-  
+  scale_fill_brewer(palette = "Blues")+
+  stat_summary(fun.data = mean_sdl, fun.args = list(mult=1))+
+  labs(title="Cases Per Million (30 day average)")
+
+CpmViolin2
 
 ```
 
-## How else would you do it?
+Finally we learned to conduct some basic statistics on data that we want to compare. 
+
+``` {r StatTesting, include = TRUE}
+# First we filter tables based on the data that we want to compare. In this # case we are comparing the number of cases per million in the last month
+# between CA and FL.
+
+CAcases <- LastMonthInfections %>%
+  filter(State == "CA")
+
+FLcases <- LastMonthInfections %>%
+  filter(State =="FL")
+
+# We can then use the t.test() function on specific columns to calculate
+# our t-test comparing the two data sets.
+
+t.test(CAcases$CPM, FLcases$CPM)
+
+```
+
+
+
+## Challenge
+
+For your breakout room sessions. Take the code chunk below and create a plot that is different in some way compared to the plots shown above. Feel free to use any of the data we have imported over the course of the session. Try using a different Geom in ggplot, filtering the data differently, or changing some of the aes parameters.
 
 ``` {r YourPlotHere, include = FALSE}
 
