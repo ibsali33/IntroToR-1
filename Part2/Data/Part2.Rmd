@@ -10,9 +10,11 @@ output:
 
 ## R Markdown and Code Chunks
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, 
+and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+When you click the **Knit** button a document will be generated that includes both content as well 
+as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r NameOfChunk, include = TRUE}
 
@@ -22,15 +24,19 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ```{r ExampleChunk, warning=FALSE, include=FALSE}
 
-# Include = FALSE means the code for this will not show up in the final report, change this to TRUE and see what happens.
+# Include = FALSE means the code for this will not show up in the final report, 
+# change this to TRUE and see what happens.
 
-# Warning = FALSE means that any warnings that come up while the code is running will not be displayed. 
+# Warning = FALSE means that any warnings that come up while the code is running 
+# will not be displayed. 
 
 # Within code chunks, the R code will be interpreted. Outside the code chunks it will not.
 
-# Outside the code chunks you can type in text and heading using Markdown to format and organize reports.
+# Outside the code chunks you can type in text and heading using Markdown to format and 
+# organize reports.
 
-# Create new headings outside the code chunch with one or more # symbols. For example, copy and paste this code outside the code chunk and see what it does:
+# Create new headings outside the code chunch with one or more # symbols. For example, 
+# copy and paste this code outside the code chunk and see what it does:
 
 # Heading 1
 ## Heading 2
@@ -48,7 +54,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # This code chunk will load all the packages needed for this document. 
 
-# For reports like this, it is best to install the necessary packages and load the libraries first. That way you know ahead of time if you are going to run into any issues with operations later on.
+# For reports like this, it is best to install the necessary packages and load the libraries 
+# first. That way you know ahead of time if you are going to run into any issues with operations later on.
 
 library('tidyr')
 library('dplyr')
@@ -61,7 +68,10 @@ library('lubridate')
 
 ## Importing Data and Selecting Columns
 
-We will learn to import data into R and reshape it into formats that are useful for data visualization. For our research question, we will work with public COVD19 data to visualize the number of COVID19 cases per million for every state in the form of a heatmap and imagine other ways we would want to visualize this kind of information. 
+We will learn to import data into R and reshape it into formats that are useful for data 
+visualization. For our research question, we will work with public COVD19 data to visualize 
+the number of COVID19 cases per million for every state in the form of a heatmap and imagine 
+other ways we would want to visualize this kind of information. 
 
 ```{r DataImport, include = TRUE}
 
@@ -164,8 +174,8 @@ CpmViolin2
 Finally we learned to conduct some basic statistics on data that we want to compare. 
 
 ``` {r StatTesting, include = TRUE}
-# First we filter tables based on the data that we want to compare. In this # case we are comparing the number of cases per million in the last month
-# between CA and FL.
+# First we filter tables based on the data that we want to compare. In this # case we are 
+# comparing the number of cases per million in the last month between CA and FL.
 
 CAcases <- LastMonthInfections %>%
   filter(State == "CA")
@@ -184,7 +194,10 @@ t.test(CAcases$CPM, FLcases$CPM)
 
 ## Challenge
 
-For your breakout room sessions. Take the code chunk below and create a plot that is different in some way compared to the plots shown above. Feel free to use any of the data we have imported over the course of the session. Try using a different Geom in ggplot, filtering the data differently, or changing some of the aes parameters.
+For your breakout room sessions. Take the code chunk below and create a plot that 
+is different in some way compared to the plots shown above. Feel free to use any of
+the data we have imported over the course of the session. Try using a different Geom 
+in ggplot, filtering the data differently, or changing some of the aes parameters.
 
 ``` {r YourPlotHere, include = FALSE}
 
