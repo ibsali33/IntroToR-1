@@ -35,15 +35,15 @@
 
 ## Day1: Introduction to R Studio, how to find help, Rstudio cheat 
 ## sheets, installing packages, loading libraries, data structures 
-## and classes, importing data.
+## and classes, importing data, examining data sets.
 
-## Day2: Examining bias in data sets, data wrangling with tidyr and 
-## dplyr, data visualization with pheatmap, data visualization with ggplot2.
+## Day2: Filtering, selecting and calculating columns with tidyr and dplyr, 
+## grammar of graphics in ggplot, basic data visualization with ggplot2.
 
-## Day3: Data visualization with ggplot2, peer learning activities, 
-## writing and presenting reports.
+## Day3: R markdown basics. More data visualization with ggplot2, peer learning
+## activities, writing and presenting reports.
 
-# Take notes and annotate within this document by using the hashtag / 
+# Take notes and annotate within this document by using the hashtag / pound #
 # symbol
 
 # =====================================================================
@@ -514,7 +514,7 @@ CovidStateData <- left_join(StatePop, CovidData, by = c("StateAbbreviation"="sta
 # Using pipes in dplyr
 # ---------------------------------------------------------------------
 
-# Pipes are operators that can be used to string together verbs in dplyr. 
+# Pipes are operators that can be used to string together commands in dplyr. 
 # They looks like this %>%. Using pipes enables stringing together multiple 
 # dplyr operations in one step. Notice the syntax of this example. Organizing 
 # the code in this way can help with readability of the code.
